@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <!-- <input type="text" name="" id="inp"> -->
+        <button id="inp">防抖</button>
+        <button id="inp2">节流</button>
+    </div>
+</body>
+<script>
+    function debounce(fn) {
+        let timeout = null;
+        let { a,b }= [1,2]
+        return function(a,b){
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                console.log(arguments)
+                fn.apply(this, arguments)
+            },500)
+        }
+    }
+    function sayHi(a,v){
+        console.log('防抖')
+    }
+    var inp = document.getElementById('inp');
+    inp.addEventListener('click', debounce(sayHi(1,2))); // 防抖
+
+</script>
+</html>

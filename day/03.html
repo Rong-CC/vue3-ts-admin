@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扁平化转tree</title>
+</head>
+<body>
+ 
+</body>
+<script>
+   let string = [{"id":1,"labelId":"authority-organize-add","labelName":"新增","parentId":"organize","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-organize-add","menuOperationName":"新增"},{"id":2,"labelId":"authority-organize-del","labelName":"删除","parentId":"organize","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-organize-del","menuOperationName":"删除"},{"id":3,"labelId":"authority-organize-edit","labelName":"编辑","parentId":"organize","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-organize-edit","menuOperationName":"编辑"},{"id":4,"labelId":"authority-organize-query","labelName":"查询","parentId":"organize","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-organize-query","menuOperationName":"查询"},{"id":5,"labelId":"authority-staff-add","labelName":"新增","parentId":"staff","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-staff-add","menuOperationName":"新增"},{"id":6,"labelId":"authority-staff-del","labelName":"删除","parentId":"staff","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-staff-del","menuOperationName":"删除"},{"id":7,"labelId":"authority-staff-edit","labelName":"编辑","parentId":"staff","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-staff-edit","menuOperationName":"编辑"},{"id":8,"labelId":"authority-staff-query","labelName":"查询","parentId":"staff","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-staff-query","menuOperationName":"查询"},{"id":9,"labelId":"authority-role-add","labelName":"新增","parentId":"role","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-role-add","menuOperationName":"新增"},{"id":10,"labelId":"authority-role-del","labelName":"删除","parentId":"role","type":2,"level":null,"hasAuth":false,"menuId":null,"menuName":null,"menuOperationId":"authority-role-del","menuOperationName":"删除"}]
+  //  string.reduce((item,i)=>{
+  //     console.log(item,i);
+  //  })
+  function tree(data,id,parentid,children){
+    let i =0;
+    const tree = []
+    const record = {}
+    while( i <  data.length){
+      const item = data[i]
+      const name = item[id]
+
+      if(record[name]){
+        item[children] =record[name]
+      }else{
+        
+      }
+      // data[i]
+      console.log(data[i]);
+      console.log(i++);
+      // i++
+    }
+    // data.forEach(element => {
+    //   console.log(element,'1');
+    // });
+  }
+  tree(string)
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+  <script src="http://cdn.bootcss.com/babel-core/5.8.24/browser.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/babel-polyfill/7.8.7/polyfill.js"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+
+</script>
+
+<script type="text/javascript">
+  class MyPromise {
+    constructor (executor) {
+      this.state = 'pending';
+      // 成功的值
+      this.value = undefined;
+      // 失败的值
+      this.reason = undefined;
+      // 存储成功的数组
+      this.onResolvedCallbacks = [];
+      // 存储失败的数组
+      this.onRejectedCallbacks = [];
+      // 成功
+      let  resolve = value => {
+        if (this.state !== 'pending')  return;
+        this.state = 'fulfilled';
+        this.value = value;
+           // 一旦resolve执行，调用成功数组的函数
+        this.onResolvedCallbacks.forEach(fn=>fn());
+      };
+      // 失败
+      let reject = reason => {
+        if (this.state !== 'pending')  return;
+        this.state = 'rejected';
+        this.value = reason;
+        // 一旦reject执行，调用失败数组的函数
+        this.onRejectedCallbacks.forEach(fn=>fn());
+      };
+
+      // 捕获失败
+      try {
+        executor(resolve,reject);
+      } catch (err) {
+        reject(err);
+      }
+    }
+    then (onFulfilled, onRejected) {
+        if (this.state === 'fulfilled') {
+          onFulfilled(this.value);
+        };
+        if (this.state === 'rejected') {
+          onRejected(this.reason);
+        };
+
+        if (this.state === 'pending') {
+          // onFulfilled传入到成功数组
+          this.onResolvedCallbacks.push(()=>{
+            onFulfilled(this.value);
+          })
+          console.log(this.onResolvedCallbacks)
+          // onRejected传入到失败数组
+          this.onRejectedCallbacks.push(()=>{
+            onRejected(this.reason);
+          })
+        }
+      }
+
+  }
+  let p2 = new Promise((resolve,reject)=>{
+     setTimeout(()=>{
+       resolve(1)
+     })
+  })
+  let p1 = new MyPromise((resolve,reject) => {
+    setTimeout(()=>{
+       resolve(1); 
+     },2000)
+  }).then(res=>{
+    console.log(res)
+  })
+  console.log(p2)
+  console.log(p1,' 1')
+</script>

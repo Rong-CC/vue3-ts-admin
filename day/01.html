@@ -1,0 +1,69 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-03-10 16:31:21
+ * @LastEditTime: 2021-03-10 17:11:18
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /daliy/day/01.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串唯一</title>
+</head>
+<body>
+    
+</body>
+<script>
+// s = "leetcode"
+// 返回 0
+
+let s = "loveleetcode"
+let firstUniqchar = function(s){
+    const position  = new Map();
+    const length = s.length
+    for (let [i,ch] of Array.from(s).entries()){
+        if(position.has(ch)){
+            position.set(ch,-1)
+        } else {
+            position.set(ch,i)
+        }
+    }
+    let first = length;
+    console.log(position.values());
+    for (let pos of position.values()){
+        if(pos !== -1 && pos < first){
+            first = pos
+        }
+    }
+    if(first ===length){
+        return -1;
+    }
+    return first
+}
+console.log(firstUniqchar(s));
+// ------------method2----------------
+let firstUniqchar2 = function(s){
+    const postion = new Map();
+    const q = [];
+    for (let [i,ch] of Array.from(s).entries()){
+        if(!postion.has(ch)){
+            postion.set(ch,i)  
+            q.push([s[i],i]);
+            console.log(q);
+        } else{
+            postion.set(ch,-1)
+            while(q.length && postion.get(q[0][0]) === -1){
+                q.shift();
+            }
+        }
+    }
+    console.log(postion);
+    return q.length? q[0][1]:-1
+}
+console.log(firstUniqchar2(s));
+</script>
+</html>

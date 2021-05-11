@@ -1,0 +1,69 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-03-11 09:57:53
+ * @LastEditTime: 2021-03-11 10:40:39
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /daliy/day/02.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
+
+    整数除法仅保留整数部分。
+
+     
+
+    示例 1：
+
+    输入：s = "3+2*2"
+    输出：7
+</div>
+</body>
+<script>
+function calculate (s){
+    s = s.trim();
+    const stack = new Array();
+    let preSign = '+';
+    let num = 0;
+    const n = s.length;
+    for(let i = 0; i<n; ++i) {
+        if(!isNaN(Number(s[i])) && s[i] !== ' '){
+            num = num * 10 +s[i].charCodeAt() - '0'.charCodeAt();
+        }
+        if(isNaN(Number(s[i])) || i === n-1){
+            switch(preSign){
+                case '+':
+                    stack.push(num);
+                    break
+                case '-':
+                    stack.push(-num);
+                    break;
+                case '*':
+                    stack.push(stack.pop()* num);
+                    break;
+                default:
+                    stack.push(stack.pop()/num|0);
+            }
+            preSign = s[i]
+            num =0
+        }
+    }
+    let ans = 0;
+    while(stack.length){
+        ans += stack.pop()
+    }
+    return ans;
+}
+console.log(calculate('3+2*2'));
+
+</script>
+</html>

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <Layout class="layout">
+            <Header :style="{padding: 0}" class="layout-header-bar">
+                <Icon :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
+                <div class="header-right">
+                    <Icon type="ios-search"  size="16"></Icon>
+                    <Icon type="md-notifications-outline"  size="16"></Icon>
+                    <div class="header-portrait">
+                        <img src="https://s1.ax1x.com/2020/04/16/Jk9yzn.png" alt="">
+                        <span>用户名</span>
+                    </div>
+                </div>
+            </Header>
+            <p class="header-titile">农业主体基本信息调查表</p>
+            <Content class="content-box" :style="{margin: '10px', background: '#fff', minHeight: '260px'}">
+                <i-form :model="formItem" :label-width="130">
+                    <Row>
+                        <i-col span="8">
+                            <form-item label="主体名称：">
+                                <i-input v-model="formItem.ztmc" placeholder="请输入主体名称"/>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="法人代表：">
+                                <i-input v-model="formItem.frdb" placeholder="请输入法人代表"/>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="联系电话：">
+                                <i-input v-model="formItem.tel" placeholder="请输入联系电话"/>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="行政区域：">
+                                <i-select v-model="formItem.xzqy" placeholder="请选择区域">
+                                    <i-option v-for="(v,k) in areaList "  :value="v.value">{{v.label}}</i-option>
+                                    <!-- <i-option value="shanghai">London</i-option>
+                                    <i-option value="shenz2hen">Sydney</i-option> -->
+                                </i-select>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="地址：">
+                                <i-input v-model="formItem.tel" placeholder="请输入地址"/>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="统一社会编码：">
+                                <i-input v-model="formItem.tel" placeholder="请输入统一社会编码"/>
+                            </form-item>
+                        </i-col>
+                        <i-col span="8">
+                            <form-item label="年生产总值(万元)：">
+                                <i-input v-model="formItem.tel" placeholder="请输入年生产总值"/>
+                            </form-item>
+                        </i-col>
+                        <divider></divider>
+                        <i-col span="24">
+                            <form-item label="经营类型：">
+                                <checkbox-group v-model="formItem.interestType">
+                                    <checkbox v-for="(item,key) in business" :key="key"  :label="item.typeId" :value="item.typeId">{{item.label}}</checkbox>
+                                </checkbox-group>
+                            </form-item>
+                        </i-col>
+                        <divider></divider>
+                        <i-col span="24">
+                            <form-item label="经营产品：">
+                                <div v-for="(item,index) in typeList" :key="index">
+                                    <Row v-show="formItem.interestType.includes(item.typeId)" >
+                                        <i-col span="2">{{item.label+ ':'}}</i-col>
+                                        <i-col span="22">
+                                            <checkbox-group v-model="formItem.interest">
+                                                <checkbox v-for="(v,key) in item.array"  :key="key" :label="v.title" :value="v.id"></checkbox>
+                                            </checkbox-group>
+                                        </i-col>
+                                    </Row>
+                                </div>
+                            </form-item>
+                        </i-col>
+                        <divider></divider>
+                        <i-col span="24">
+                            <form-item label="年经营规模：">
+                                <Row>
+                                    <i-col span="4" class="flex-box" v-show="formItem.interestType.includes(2)">
+                                        <span>蔬菜种植</span>
+                                        <input-number class="flex-box-inp"  :min="0" v-model="formItem.standard1"></input-number>
+                                        <span>亩</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box" v-show="formItem.interestType.includes(1)">
+                                        <span>水果种植</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard2"></input-number>
+                                        <span>万亩</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box" v-show="formItem.interestType.includes(4)" >
+                                        <span>中药材</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard3"></input-number>
+                                        <span>亩</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box" v-show="formItem.interestType.includes(3)">
+                                        <span>粮油</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard4"></input-number>
+                                        <span>亩</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box" v-show="formItem.interestType.includes(5)">
+                                        <span>林特</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard5"></input-number>
+                                        <span>亩</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(16)">
+                                        <span>茶叶种植</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard6"></input-number>
+                                        <span>亩</span>
+                                    </i-col>
+                                    <!-- <i-col span="4" class="flex-box">
+                                        <span>豆苗种植</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard7"></input-number>
+                                        <span>亩</span>
+                                    </i-col> -->
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(15)">
+                                        <span>食用菌</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard8"></input-number>
+                                        <span>万棒</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(6)">
+                                        <span>水产养殖</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard9"></input-number>
+                                        <span>万棒</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(6)">
+                                        <span>水产鱼苗</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard10"></input-number>
+                                        <span>尾</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(7)">
+                                        <span>鸡存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard11"></input-number>
+                                        <span>万只</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(8)">
+                                        <span>鸭存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard12"></input-number>
+                                        <span>万只</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(9)">
+                                        <span>养蜂</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard13"></input-number>
+                                        <span>箱</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(10)">
+                                        <span>猪存栏</span>
+                                        <input-number class="flex-box-inp":min="0"  v-model="formItem.standard14"></input-number>
+                                        <span>头</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(11)">
+                                        <span>羊存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard15"></input-number>
+                                        <span>头</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(12)">
+                                        <span>牛存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard16"></input-number>
+                                        <span>头</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(13)">
+                                        <span>兔存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard17"></input-number>
+                                        <span>只</span>
+                                    </i-col>
+                                    <i-col span="4" class="flex-box"  v-show="formItem.interestType.includes(14)">
+                                        <span>鸟类存栏</span>
+                                        <input-number class="flex-box-inp" :min="0" v-model="formItem.standard18"></input-number>
+                                        <span>只</span>
+                                    </i-col>
+                                </Row>
+                            </form-item>
+                        </i-col>
+                        <divider></divider>
+                        <i-col span="24">
+                            <form-item label="投入品仓库：">
+                                <radio-group v-model="formItem.trcck">
+                                    <radio v-for="(item,key) in roadioList" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        <i-col span="24">
+                            <form-item label="快速检测室：">
+                                <radio-group v-model="formItem.xujcs">
+                                    <radio v-for="(item,key) in roadioList" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                        <i-col span="24">
+                            <form-item label="合格证：">
+                                <radio-group v-model="formItem.hgz">
+                                    <radio v-for="(item,key) in CertificateList" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                        <i-col span="24">
+                            <form-item label="违禁药品：">
+                                <radio-group v-model="formItem.wjyp">
+                                    <radio v-for="(item,key) in CertificateList" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                        <i-col span="24">
+                            <form-item label="企业类型：">
+                                <radio-group v-model="formItem.qylx">
+                                    <radio v-for="(item,key) in enterpriseType" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                        <i-col span="24">
+                            <form-item label="食品证书：">
+                                <radio-group v-model="formItem.spzs">
+                                    <radio v-for="(item,key) in foodstuff" :key="key"  :label="item.value" >{{item.label}}</radio>
+                                </radio-group>
+                            </form-item>
+                        </i-col>
+                        <i-col span="24">
+                            <form-item label="经营渠道：">
+                                <checkbox-group v-model="formItem.jxqd">
+                                    <checkbox v-for="(v,key) in channel"  :key="key" :label="v.value" :value="v.value"> {{v.label}}</checkbox>
+                                </checkbox-group>
+                            </form-item>
+                        </i-col>
+                        <divider></divider>
+                        <p class="text-title">近2年农产品质量安全事故信息：</p>
+                        <i-col span="24">
+                            <form-item  :label-width="20" >
+                                <i-input :rows="4" type="textarea" v-model="formItem.ztmc" placeholder="该项由管理部门填写"/>
+                            </form-item>
+                        </i-col>
+                        <p class="text-title">承诺：</p>
+                        <i-col span="24" >
+                            <form-item :label-width="20">
+                                <i-input  :rows="4" type="textarea" v-model="formItem.cn" placeholder=""/>
+                            </form-item>
+                        </i-col>            
+                        <p class="text-title">备注：</p>
+                        <i-col span="24" >
+                            <form-item :label-width="20">
+                                <i-input  :rows="4" type="textarea" v-model="formItem.remark" placeholder="选填"/>
+                            </form-item>
+                        </i-col>            
+                    </Row>
+                </i-form>
+                <row type="flex" justify="end">
+                    <i-col span="3">
+                        <i-button type="primary" ghost>重置</i-button>
+                        <i-button class="m-l-10" type="primary">提交</i-button>
+                    </i-col>
+                </row>
+            </Content>
+        </Layout>
+
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false,
+            isCollapsed: false,
+            formItem: {
+                interest1: '',
+                trcck: 1,
+                xujcs: 1,
+                hgz: 1,
+                wjyp: 1,
+                qylx: 1,
+                spzs: 1,
+                remark: '',
+                cn:'本公司/人承诺本公司/人所生产经营的农业产品均合法合规。承诺不使用违禁药品。正确使用三品一标，正确使用合格证。承诺人签名（盖章）：',
+                jxqd: [],
+                interestType: []
+            },
+            areaList:[
+                {
+                    value: 1,
+                    label: '江干区'
+                },
+                {
+                    value: 2,
+                    label: '下城区'
+                },
+                {
+                    value: 3,
+                    label: '上城区'
+                },
+                {
+                    value: 4,
+                    label: '拱墅区'
+                },
+                {
+                    value: 5,
+                    label: '西湖区'
+                },
+                {
+                    value: 6,
+                    label: '萧山区'
+                },
+                {
+                    value: 7,
+                    label: '滨江区'
+                },
+                {
+                    value: 8,
+                    label: '淳安县'
+                },
+                {
+                    value: 9,
+                    label: '余杭区'
+                },
+                {
+                    value: 10,
+                    label: '富阳区'
+                },
+                {
+                    value: 11,
+                    label: '桐庐县'
+                },
+                {
+                    value: 12,
+                    label: '临安区'
+                },
+                {
+                    value: 13,
+                    label: '建德市'
+                },
+                {
+                    value: 14,
+                    label: '西湖风景名胜区'
+                },
+                {
+                    value: 15,
+                    label: '钱塘新区'
+                },
+            ],
+            channel:[
+                {
+                    value: 1,
+                    label: '零售'
+                },
+                {
+                    value: 2,
+                    label: '农贸市场'
+                },
+                {
+                    value: 7,
+                    label: '批发市场'
+                },
+                {
+                    value: 3,
+                    label: '集中收购'
+                },
+                {
+                    value: 4,
+                    label: '专卖店'
+                },
+                {
+                    value: 5,
+                    label: '超市'
+                },
+                {
+                    value: 6,
+                    label: '淘宝/天猫'
+                },
+                {
+                    value: 111,
+                    label: '京东'
+                },
+                {
+                    value: 8,
+                    label: '自建网上商城'
+                },
+                {
+                    value: 9,
+                    label: '苏宁'
+                },
+                {
+                    value: 11,
+                    label: '拼多多'
+                },
+                {
+                    value: 10,
+                    label: '其他'
+                }
+            ],
+            foodstuff:[
+                {
+                    value: 1,
+                    label: '无公害农产品'
+                },
+                {
+                    value: 2,
+                    label: '绿色食品'
+                },
+                {
+                    value: 3,
+                    label: '有机农产品'
+                },
+                {
+                    value: 4,
+                    label: 'GAP认证'
+                },
+                {
+                    value: 5,
+                    label: '其他'
+                },
+            ],
+            enterpriseType:[
+                {
+                    value: 1,
+                    label: '专业合作社'
+                },
+                {
+                    value: 2,
+                    label: '龙头企业'
+                },
+                {
+                    value: 3,
+                    label: '家庭农场'
+                },
+                {
+                    value: 4,
+                    label: '有限公司'
+                },
+                {
+                    value: 5,
+                    label: '其他'
+                }
+            ],
+            CertificateList:[
+                {
+                    value: 1,
+                    label: '使用'
+                },
+                {
+                    value: 2,
+                    label: '未使用'
+                }
+            ],
+            roadioList:[
+                {
+                    value: 1,
+                    label: '已建'
+                },
+                {
+                    value: 2,
+                    label: '未建'
+                }
+            ],
+            business:[
+                {
+                    typeId:1,
+                    label:'水果种植',
+                },
+                {
+                    typeId:2,
+                    label:'蔬菜种植',
+                },
+                {
+                    typeId: 16,
+                    label:'茶叶',
+                },
+                {
+                    typeId:3,
+                    label:'粮油',
+                },
+                {
+                    typeId:4,
+                    label:'中药材',
+                },
+                {
+                    typeId:5,
+                    label:'林特',
+                },
+                {
+                    typeId:6,
+                    label:'水产鱼苗',
+                },
+                {
+                    typeId:7,
+                    label:'鸡养殖',
+                },
+                {
+                    typeId:8,
+                    label:'鸭养殖',
+                },
+                {
+                    typeId:9,
+                    label:'养蜂',
+                },
+                {
+                    typeId:10,
+                    label:'猪养殖',
+                },
+                {
+                    typeId:11,
+                    label:'羊养殖',
+                },
+                {
+                    typeId:12,
+                    label:'牛养殖',
+                },
+                {
+                    typeId:13,
+                    label:'兔养殖',
+                },
+                {
+                    typeId:14,
+                    label:'鸟类养殖',
+                },
+                {
+                    typeId:15,
+                    label:'食用菌',
+                }
+            ],
+            typeList:[
+                {
+                    typeId:2,
+                    label: '蔬菜种植',
+                    array:[
+                        {
+                            id: 1,
+                            title:'叶菜类'
+                        },
+                        {
+                            id: 2,
+                            title:'根茎类'
+                        },
+                        {
+                            id: 3,
+                            title:'白菜类'
+                        },
+                        {
+                            id: 4,
+                            title:'葱蒜类'
+                        },
+                        {
+                            id: 5,
+                            title:'瓜'
+                        },
+                        {
+                            id: 6,
+                            title:'茄果类'
+                        },
+                        {
+                            id: 7,
+                            title:'豆'
+                        },
+                        {
+                            id: 8,
+                            title:'薯芋'
+                        },
+                        {
+                            id: 9,
+                            title:'水生'
+                        },
+                        {
+                            id: 10,
+                            title:'多年生'
+                        },
+                        {
+                            id: 11,
+                            title:'苗芽'
+                        },
+                        {
+                            id: 12,
+                            title:'野菜'
+                        },
+                        {
+                            id: 13,
+                            title:'干菜'
+                        },
+                        {
+                            id: 14,
+                            title:'点心'
+                        },
+                        {
+                            id: 15,
+                            title:'腌菜'
+                        },
+                        {
+                            id: 16,
+                            title:'果菜'
+                        },
+                        {
+                            id: 17,
+                            title:'藻类'
+                        },
+                        {
+                            id: 18,
+                            title:'果蔬'
+                        },
+                        {
+                            id: 19,
+                            title:'笋'
+                        },
+                        {
+                            id: 20,
+                            title:'豆苗'
+                        }
+                    ]
+                },
+                {
+                    typeId:1,
+                    label: '水果种植',
+                    array:[
+                        {
+                            id: 100,
+                            title:'浆果'
+                        },
+                        {
+                            id: 101,
+                            title:'柑橘'
+                        },
+                        {
+                            id: 102,
+                            title:'核果'
+                        },
+                        {
+                            id: 103,
+                            title:'仁果'
+                        },
+                        {
+                            id: 104,
+                            title:'瓜'
+                        },
+                        {
+                            id: 105,
+                            title:'其他'
+                        }
+                    ]
+                },
+                {
+                    typeId: 16,
+                    label: '茶叶种植',
+                    array:[
+                        {
+                            id: 201,
+                            title:'绿茶'
+                        },
+                        {
+                            id: 202,
+                            title:'红茶'
+                        },
+                        {
+                            id: 203,
+                            title:'乌龙茶'
+                        },
+                        {
+                            id: 204,
+                            title:'白茶'
+                        },
+                        {
+                            id: 205,
+                            title:'黄茶'
+                        },
+                        {
+                            id: 206,
+                            title:'黑茶'
+                        },
+                        {
+                            id: 207,
+                            title:'藏茶'
+                        },
+                        {
+                            id: 208,
+                            title:'花茶'
+                        },
+                        {
+                            id: 209,
+                            title:'花茶'
+                        },
+                    ]
+                },
+                {
+                    typeId: 6,
+                    label: '水产养殖',
+                    array:[
+                        {
+                            id: 301,
+                            title:'淡水鱼'
+                        },
+                        {
+                            id: 302,
+                            title:'海水鱼'
+                        },
+                        {
+                            id: 303,
+                            title:'鳖类'
+                        },
+                        {
+                            id: 304,
+                            title:'淡水虾'
+                        },
+                        {
+                            id: 305,
+                            title:'海水虾'
+                        },
+                        {
+                            id: 306,
+                            title:'蟹类'
+                        },
+                        {
+                            id: 307,
+                            title:'鱼干'
+                        }
+                    ]
+                },
+                {
+                    typeId: 6,
+                    label: '水产鱼苗',
+                    array:[
+                        {
+                            id: 401,
+                            title:'鱼苗'
+                        },
+                        {
+                            id: 402,
+                            title:'虾苗'
+                        }
+                    ]
+                },
+                {
+                    typeId: 7,
+                    label: '鸡养殖',
+                    array:[
+                        {
+                            id: 501,
+                            title:'鸡'
+                        },
+                        {
+                            id: 502,
+                            title:'雪鹜'
+                        },
+                        {
+                            id: 503,
+                            title:'鸡蛋'
+                        }
+                    ]
+                },
+                {
+                    typeId: 8,
+                    label: '鸭养殖',
+                    array:[
+                        {
+                            id: 600,
+                            title:'鸭'
+                        },
+                        {
+                            id: 601,
+                            title:'鸭蛋'
+                        }
+                    ]
+                },
+                {
+                    typeId: 14,
+                    label: '鸟类养殖',
+                    array:[
+                        {
+                            id: 701,
+                            title:'大雁'
+                        },
+                        {
+                            id: 702,
+                            title:'鸽子'
+                        }
+                    ]
+                },
+                {
+                    typeId: 10,
+                    label: '猪养殖',
+                    array:[
+                        {
+                            id: 800,
+                            title:'商品猪'
+                        },
+                        {
+                            id: 801,
+                            title:'繁殖猪'
+                        },
+                        {
+                            id: 802,
+                            title:'猪仔'
+                        }
+                    ]
+                },
+                {
+                    typeId: 11,
+                    label: '羊养殖',
+                    array:[
+                        {
+                            id: 900,
+                            title:'商品羊'
+                        },
+                        {
+                            id: 901,
+                            title:'商品羊'
+                        },
+                        {
+                            id: 902,
+                            title:'种公羊'
+                        },
+                        {
+                            id: 903,
+                            title:'种母羊'
+                        },
+                        {
+                            id: 904,
+                            title:'山羊'
+                        },
+                        {
+                            id: 905,
+                            title:'羊仔'
+                        }
+                    ]
+                },
+                {
+                    typeId: 12,
+                    label: '牛养殖',
+                    array:[
+                        {
+                            id: 911,
+                            title:'商品牛'
+                        },
+                        {
+                            id: 912,
+                            title:'牛奶'
+                        },
+                        {
+                            id: 913,
+                            title:'牛仔'
+                        },
+                    ]
+                },
+                {
+                    typeId: 15,
+                    label: '食用菌',
+                    array:[
+                        {
+                            id: 920,
+                            title:'菌菇'
+                        }
+                    ]
+                },
+                {
+                    typeId: 3,
+                    label: '粮油',
+                    array:[
+                        {
+                            id: 1000,
+                            title:'粮食'
+                        },
+                        {
+                            id: 1001,
+                            title:'油茶类'
+                        },
+                        {
+                            id: 1002,
+                            title:'五谷杂粮'
+                        },
+                        {
+                            id: 1003,
+                            title:'其他'
+                        }
+                    ]
+                },
+                {
+                    typeId: 4,
+                    label: '中药材',
+                    array:[
+                        {
+                            id: 1101,
+                            title:'药材'
+                        }
+                    ]
+                },
+               {
+                    typeId: 5,
+                    label: '林特',
+                    array:[
+                        {
+                            id: 1110,
+                            title:'林特'
+                        }
+                    ] 
+                },
+               {
+                    typeId: 9,
+                    label: '养蜂',
+                    array:[
+                        {
+                            id: 1120,
+                            title:'蜜蜂'
+                        }
+                    ] 
+                },
+               {
+                    typeId: 13,
+                    label: '兔养殖',
+                    array:[
+                        {
+                            id: 1130,
+                            title:'兔子'
+                        },
+                        {
+                            id: 1131,
+                            title:'兔毛'
+                        },
+                        {
+                            id: 1132,
+                            title:'兔仔'
+                        }
+                    ] 
+                },
+               
+            ],
+        },
+        computed: {
+            rotateIcon() {
+                return [
+                    'menu-icon',
+                    this.isCollapsed ? 'rotate-icon' : ''
+                ];
+            },
+            menuitemClasses() {
+                return [
+                    'menu-item',
+                    this.isCollapsed ? 'collapsed-menu' : ''
+                ]
+            }
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
+        }
+    })
+</script>
+<style lang="css">
+    html,
+    body,
+    #app,
+    .layout {
+        height: 100%;
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .header-warp {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+    }
+    .header-right{
+        width: 140px;
+        margin-right: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .header-portrait {
+        width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .header-portrait img{
+        width: 24px;
+        height: 24px;
+    }
+
+    .layout {
+        border: 1px solid #d7dde4;
+        background: #f5f7f9;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .layout-header-bar {
+        background: #fff;
+        height: 64px;
+        line-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    }
+
+    .layout-logo-left {
+        width: 90%;
+        height: 80px;
+        background: #5b6270;
+        border-radius: 3px;
+        margin: 15px auto;
+    }
+
+    .header-titile {
+        height: 57px;
+        width: 100%;
+        line-height: 57px;
+        padding-left: 30px;
+        border: 1px solid #e8eaec;
+        color: #464C5B;
+        font-size: 20px;
+        background: #fff;
+    }
+    .content-box{
+        padding: 30px;
+        overflow-y: auto;
+    }
+    
+    .text-title{
+        font-weight: bold;
+        padding: 5px;
+        font-size: 12px;
+    }
+    .flex-box{
+        display: flex;
+        align-items: center;
+        /* justify-content: space-around; */
+    }
+    .flex-box span{
+        min-width: 56px;
+    }
+    .flex-box-inp{
+        min-width: 55px;
+        margin: 10px 10px;
+    }
+    .m-l-10{
+        margin-left: 10px;
+    }
+    .ivu-form .ivu-form-item-label{
+        font-weight: bold;
+        font-size: 12px;
+    }
+</style>
+
+</html>

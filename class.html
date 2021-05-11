@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<style>
+  .a{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+<script>
+ new Promise((resolve,rejest) => {
+   resolve(1)
+ }).then( res => {
+    return Promise.resolve(2)
+  //  return 1
+    // console.log(res)
+ }).then(item => {
+    console.log(item)
+ })
+
+ function Obj () {
+  this.x = 1
+  return  1
+ }
+ let a = new Obj()
+ console.log(a,'2')
+// class Point {
+//     constructor(x, y) {
+//     this.x = x;
+//     this.y = y;
+//   }
+//   toString (){
+//     console.log(this)
+//     return this.x + this.y + this.color
+//   }
+// }  // 父类
+
+// class ColorPoint extends Point {   // ColorPoint 通过 extends  继承 父类 point 属性
+//   constructor(x, y, color) {
+//    // console.log(this)  // 报错  在调用super前  无法访问this  
+//     super(x, y); // 调用父类的constructor(x, y)
+//     console.log(this,'colorPoint')
+//     this.color = color;
+//   }
+
+// }
+// let cp = new ColorPoint(1,2,'red');
+// let a =  new Point()
+// console.log(a)
+// console.log(cp.toString())
+// class A {}
+
+// class B extends A {
+//   constructor() {
+//     // super();
+//   }
+// }
+// let a = new B()
+// class A {
+//   constructor() {
+//     this.x = 1;
+//     this.c = 3;
+//   }
+//   print() {
+//     console.log(this)
+//     return this.x
+//   }
+// }
+
+// class B extends A {
+//   constructor() {
+//     super();
+//     console.log(super.print())
+//     this.x = 4;
+//     super.x = 2;
+//     // console.log(super.x === this.x);
+//     // this.b  = 1;
+//     // this.c = 'c';
+//     // console.log(this)
+//     // console.log(super.c ,'c')
+//     // console.log(super.x)
+//   }
+//   m() {
+//     // console.log(this,'m')
+//     // console.log(super.c,'c')
+//     super.print();
+//   }
+// }
+
+// let b = new B();
+// b.m() // 2
+// console.log(b.hasOwnProperty('print'))
+// b.print() // 3
+</script>
+</html>

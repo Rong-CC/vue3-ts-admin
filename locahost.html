@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="support"></div>
+  </body>
+  <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+  <script src="https://ip.ws.126.net/ipquery"></script>
+  <script>
+    var iPAddress = '',
+      iPAttach = '' //IP地址，IP归属地
+    GetIPAll()
+    //获取IP地址，IP归属地
+    function GetIPAll() {
+      iPAddress = returnCitySN['cip'] //IP地址:
+      iPAttach = localAddress['province'] + localAddress['city'] //IP归属地
+    }
+    console.log(iPAddress, iPAttach)
+    function getExplore() {
+      var Sys = {}
+      var ua = navigator.userAgent.toLowerCase()
+      var s
+      ;(s = ua.match(/rv:([\d.]+)\) like gecko/))
+        ? (Sys.ie = s[1])
+        : (s = ua.match(/msie ([\d\.]+)/))
+        ? (Sys.ie = s[1])
+        : (s = ua.match(/edge\/([\d\.]+)/))
+        ? (Sys.edge = s[1])
+        : (s = ua.match(/firefox\/([\d\.]+)/))
+        ? (Sys.firefox = s[1])
+        : (s = ua.match(/(?:opera|opr).([\d\.]+)/))
+        ? (Sys.opera = s[1])
+        : (s = ua.match(/chrome\/([\d\.]+)/))
+        ? (Sys.chrome = s[1])
+        : (s = ua.match(/version\/([\d\.]+).*safari/))
+        ? (Sys.safari = s[1])
+        : 0
+      // 根据关系进行判断
+      if (Sys.ie) return 'IE: ' + Sys.ie
+      if (Sys.edge) return 'EDGE: ' + Sys.edge
+      if (Sys.firefox) return 'Firefox: ' + Sys.firefox
+      if (Sys.chrome) return 'Chrome: ' + Sys.chrome
+      if (Sys.opera) return 'Opera: ' + Sys.opera
+      if (Sys.safari) return 'Safari: ' + Sys.safari
+      return 'Unkonwn'
+    }
+    function getExploreName() {
+      var userAgent = navigator.userAgent
+      if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
+        return 'Opera'
+      } else if (
+        userAgent.indexOf('compatible') > -1 &&
+        userAgent.indexOf('MSIE') > -1
+      ) {
+        return 'IE'
+      } else if (userAgent.indexOf('Edge') > -1) {
+        return 'Edge'
+      } else if (userAgent.indexOf('Firefox') > -1) {
+        return 'Firefox'
+      } else if (
+        userAgent.indexOf('Safari') > -1 &&
+        userAgent.indexOf('Chrome') == -1
+      ) {
+        return 'Safari'
+      } else if (
+        userAgent.indexOf('Chrome') > -1 &&
+        userAgent.indexOf('Safari') > -1
+      ) {
+        return 'Chrome'
+      } else if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+        return 'IE>=11'
+      } else {
+        return 'Unkonwn'
+      }
+    }
+    console.log(getExploreName(), getExplore())
+    // 获取操作系统信息
+    function getOsInfo() {
+      var userAgent = navigator.userAgent.toLowerCase()
+      var name = 'Unknown'
+      var version = 'Unknown'
+      if (userAgent.indexOf('win') > -1) {
+        name = 'Windows'
+        if (userAgent.indexOf('windows nt 5.0') > -1) {
+          version = 'Windows 2000'
+        } else if (
+          userAgent.indexOf('windows nt 5.1') > -1 ||
+          userAgent.indexOf('windows nt 5.2') > -1
+        ) {
+          version = 'Windows XP'
+        } else if (userAgent.indexOf('windows nt 6.0') > -1) {
+          version = 'Windows Vista'
+        } else if (
+          userAgent.indexOf('windows nt 6.1') > -1 ||
+          userAgent.indexOf('windows 7') > -1
+        ) {
+          version = 'Windows 7'
+        } else if (
+          userAgent.indexOf('windows nt 6.2') > -1 ||
+          userAgent.indexOf('windows 8') > -1
+        ) {
+          version = 'Windows 8'
+        } else if (userAgent.indexOf('windows nt 6.3') > -1) {
+          version = 'Windows 8.1'
+        } else if (
+          userAgent.indexOf('windows nt 6.2') > -1 ||
+          userAgent.indexOf('windows nt 10.0') > -1
+        ) {
+          version = 'Windows 10'
+        } else {
+          version = 'Unknown'
+        }
+      } else if (userAgent.indexOf('iphone') > -1) {
+        name = 'Iphone'
+      } else if (userAgent.indexOf('mac') > -1) {
+        name = 'Mac'
+      } else if (
+        userAgent.indexOf('x11') > -1 ||
+        userAgent.indexOf('unix') > -1 ||
+        userAgent.indexOf('sunname') > -1 ||
+        userAgent.indexOf('bsd') > -1
+      ) {
+        name = 'Unix'
+      } else if (userAgent.indexOf('linux') > -1) {
+        if (userAgent.indexOf('android') > -1) {
+          name = 'Android'
+        } else {
+          name = 'Linux'
+        }
+      } else {
+        name = 'Unknown'
+      }
+      return { name, version }
+    }
+    try {
+      document.createElement('canvas').getContext('2d')
+      document.getElementById('support').innerHTML =
+        '当前浏览器支持HTML5 Canvas'
+    } catch (e) {
+      document.getElementById('support').innerHTML =
+        '当前浏览器不支持HTML5 Canvas'
+    }
+    console.log(window.screen.height, window.screen.width, '屏幕分辨率')
+    console.log(getOsInfo(), '系统')
+    function getSysInfo() {
+      var locator = new ActiveXObject('WbemScripting.SWbemLocator')
+      var service = locator.ConnectServer('.')
+      //CPU信息
+      var cpu = new Enumerator(
+        service.ExecQuery('SELECT * FROM Win32_Processor')
+      ).item()
+      var cpuType = cpu.Name,
+        hostName = cpu.SystemName
+      //内存信息
+      var memory = new Enumerator(
+        service.ExecQuery('SELECT * FROM Win32_PhysicalMemory')
+      )
+      for (var mem = [], i = 0; !memory.atEnd(); memory.moveNext())
+        mem[i++] = {
+          cap: memory.item().Capacity / 1024 / 1024,
+          speed: memory.item().Speed,
+        }
+      //系统信息
+      var system = new Enumerator(
+        service.ExecQuery('SELECT * FROM Win32_ComputerSystem')
+      ).item()
+      var physicMenCap = Math.ceil(system.TotalPhysicalMemory / 1024 / 1024),
+        curUser = system.UserName,
+        cpuCount = system.NumberOfProcessors
+
+      return {
+        cpuType: cpuType,
+        cpuCount: cpuCount,
+        hostName: hostName,
+        curUser: curUser,
+        memCap: physicMenCap,
+        mem: mem,
+      }
+    }
+    console.log(getSysInfo(),'cpu')
+  </script>
+</html>
