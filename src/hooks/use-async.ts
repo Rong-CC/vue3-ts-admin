@@ -1,20 +1,21 @@
-import { ref, onMounted } from "vue"
+// import { ref, onMounted } from "vue";
 
-export const useAsync = (func: () => Promise<any>) => {
-  const loading = ref(false)
+// const useAsync = (func: () => Promise<any>) => {
+//   const loading = ref(false);
 
-  onMounted(async () => {
-    try {
-      loading.value = true
-      await func()
-    } 
-    // eslint-disable-next-line no-useless-catch
-    catch (error) {
-      throw error
-    } finally {
-      loading.value = false
-    }
-  })
+//   onMounted(async () => {
+//     try {
+//       loading.value = true;
+//       await func();
+//     } catch (error) {
+//       // eslint-disable-next-line no-useless-catch
+//       throw error;
+//     } finally {
+//       loading.value = false;
+//     }
+//   });
 
-  return loading
-}
+//   return loading;
+// };
+
+// export default useAsync;

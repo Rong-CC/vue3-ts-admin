@@ -1,3 +1,11 @@
+// /*
+//  * @Description:
+//  * @Author: rongcheng
+//  * @@后台人员: xxx
+//  * @Date: 2021-06-04 16:27:08
+//  * @LastEditors: rongcheng
+//  * @LastEditTime: 2021-06-04 16:48:32
+//  */
 // import { provide, inject, computed, ref, Ref } from "vue";
 // import { Book, Books } from "@/types";
 
@@ -26,7 +34,9 @@
 //     }
 //   };
 //   const removeFinishedBooks = (book: Book) => {
-//     const removeIndex = finishedBooks.value.findIndex(({ id }) => id === book.id);
+//     const removeIndex = finishedBooks.value.findIndex(
+//       ({ id }) => id === book.id
+//     );
 //     if (removeIndex !== -1) {
 //       finishedBooks.value.splice(removeIndex, 1);
 //     }
@@ -34,7 +44,9 @@
 
 //   // 可选图书
 //   const booksAvaluable = computed(() => {
-//     return books.value.filter(book => !finishedBooks.value.find(({ id }) => id === book.id));
+//     return books.value.filter(
+//       book => !finishedBooks.value.find(({ id }) => id === book.id)
+//     );
 //   });
 
 //   // 是否已阅

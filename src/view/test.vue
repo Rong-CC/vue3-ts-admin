@@ -2,22 +2,25 @@
  * @Description:
  * @Author: rongcheng
  * @@后台人员: xxx
- * @Date: 2021-06-04 16:27:08
+ * @Date: 2021-06-04 17:13:05
  * @LastEditors: rongcheng
- * @LastEditTime: 2021-06-04 17:44:12
+ * @LastEditTime: 2021-06-04 17:41:02
 -->
 <template>
-  <div>菜单1</div>
+  <div class="test-container page-container">
+    <div class="page-title">Unit Test Page</div>
+    <p>count is: {{ count }}</p>
+    <button @click="increment">increment</button>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
+  name: "Vuex",
   setup() {
     const count = ref<number>(0);
-    const a = [1, 4, 5];
-    const c = [...a];
     const increment = () => {
       count.value += 1;
     };
@@ -25,5 +28,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style></style>

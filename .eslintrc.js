@@ -9,7 +9,8 @@ module.exports = {
     "extends": [
         "plugin:vue/essential",
         "airbnb-base",
-        'plugin:prettier/recommended' // 添加 prettier 插件
+        'plugin:jest/recommended', //jest
+        'plugin:prettier/recommended', // 添加 prettier 插件
     ],
     "globals": {
         "Atomics": "readonly",
@@ -31,7 +32,22 @@ module.exports = {
         }
       }
     },
+    "ecmaFeatures":{
+      "restParams": true,
+      "spread": true
+    },
     "rules": {
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+     ],
+      "no-unused-vars":"off",
       "import/no-unresolved": [
         2,
         {
